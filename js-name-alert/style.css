@@ -1,0 +1,38 @@
+body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nome{
+    text-align: left;
+    font-size: 175%;
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 0%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: 0.3s ease;
+}
+
+h1{
+    font-size: 175%;
+    font-weight: lighter;
+}
+
+button{
+    width: 300px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid #000000;
+    margin-top: 0%;
+    background-color: #e4e4e4;
+}
