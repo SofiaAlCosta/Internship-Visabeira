@@ -710,6 +710,77 @@ def checkout():
     except Exception as e:
         return f"<p>Erro no checkout: {e}</p>"
 
+@app.route("/confirmar_encomenda", methods=["POST"])
+def confirmar_encomenda():
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+            if not carrinho:
+                return "<p>Carrinho vazio.</p>"
+
+            carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                SELECT ProdutoID, Quantidade
+                FROM carrinho_produtos
+                WHERE CarrinhoID = %s
+            """, (carrinho_id,))
+            produtos = cursor.fetchall()
+            if not produtos:
+                return "<p>Carrinho sem produtos.</p>"
+
+            cursor.execute("""
+                SELECT SUM(p.Preco * cp.Quantidade) AS total
+                FROM carrinho_produtos cp
+                JOIN produto p ON cp.ProdutoID = p.ProdutoID
+                WHERE cp.CarrinhoID = %s
+            """, (carrinho_id,))
+            total = cursor.fetchone()["total"]
+
+            metodo_pagamento = request.form.get("pagamento")
+
+            cursor.execute("""
+                INSERT INTO encomendas (ClienteID, Data, Total, MetodoPagamento)
+                VALUES (%s, NOW(), %s, %s)
+            """, (cliente_id, total, metodo_pagamento))
+            encomenda_id = cursor.lastrowid
+
+            for p in produtos:
+                cursor.execute("""
+                    INSERT INTO encomendas_produtos (EncomendaID, ProdutoID, Quantidade)
+                    VALUES (%s, %s, %s)
+                """, (encomenda_id, p["ProdutoID"], p["Quantidade"]))
+
+            cursor.execute("DELETE FROM carrinho_produtos WHERE CarrinhoID = %s", (carrinho_id,))
+            cursor.execute("DELETE FROM carrinhos WHERE CarrinhoID = %s", (carrinho_id,))
+
+            connection.commit()
+        connection.close()
+
+        return redirect("/encomenda_confirmada")
+
+    except Exception as e:
+        return f"<p>Erro ao confirmar encomenda: {e}</p>"
+    
+@app.route("/encomenda_confirmada")
+def encomenda_confirmada():
+    return render_template("confirmation.html", categoria_data=select_from_database("SELECT * FROM categorias"))
+
+
 
 
 

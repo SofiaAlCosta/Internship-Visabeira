@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Encomenda Confirmada{% endblock %}
+
+{% block content %}
+<style>
+    .confirm-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 40px;
+        background-color: #f0f8f5;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        text-align: center;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .confirm-container h2 {
+        color: #27ae60;
+        margin-bottom: 20px;
+    }
+
+    .confirm-container p {
+        font-size: 18px;
+        color: #444;
+    }
+
+    .btn-voltar {
+        display: inline-block;
+        margin-top: 30px;
+        background-color: #0071e3;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .btn-voltar:hover {
+        background-color: #005bb5;
+    }
+</style>
+
+<div class="confirm-container">
+    <h2>✅ Encomenda Confirmada!</h2>
+    <p>Obrigado pela sua compra. A sua encomenda foi registada com sucesso.</p>
+    <a class="btn-voltar" href="/">Voltar à Loja</a>
+</div>
+{% endblock %}
