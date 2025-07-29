@@ -164,6 +164,27 @@
         </form>
     </div>
 
+    <h2 style="text-align: center; background-color: rgb(230, 230, 230);">Definições</h2>
+    <div class="dadosconta">
+        <div class="row">
+            <div class="col-25"><label>Notificações:</label></div>
+            <div class="col-75">
+                <input type="checkbox"> Receber notificações por email<br>
+                <input type="checkbox"> Receber notificações por SMS
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-25"><label>Conta:</label></div>
+            <div class="col-75">
+                <form id="apagar-conta-form" action="/apagar_conta" method="POST" onsubmit="return confirmarApagarConta();">
+                    <button type="submit" class="botao vermelho" style="margin-top: 10px;">
+                        Apagar conta
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         let modoEdicaoAtivo = false;
 

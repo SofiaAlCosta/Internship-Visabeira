@@ -259,7 +259,35 @@ def profile():
 
     return render_template("profile.html", categoria_data=select_from_database("SELECT * FROM categorias"), encomendas=encomendas, morada=morada)
 
-
+@app.route("/apagar_conta", methods=["POST"])
+def apagar_conta():
+    cliente_email = session.get("email")
+    if not cliente_email:
+        return redirect("/login")
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT ClienteID FROM clientes WHERE Email = %s", (cliente_email,))
+            cliente = cursor.fetchone()
+            if cliente:
+                cliente_id = cliente["ClienteID"]
+                cursor.execute("DELETE FROM moradas WHERE ClienteID = %s", (cliente_id,))
+                cursor.execute("DELETE FROM encomendas WHERE ClienteID = %s", (cliente_id,))
+                cursor.execute("DELETE FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+                cursor.execute("DELETE FROM clientes WHERE ClienteID = %s", (cliente_id,))
+                connection.commit()
+        connection.close()
+        session.clear()
+        return redirect("/")
+    except Exception as e:
+        return f"<p>Erro ao apagar conta: {e}</p>"
 
 
 
