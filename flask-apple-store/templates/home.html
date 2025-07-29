@@ -90,6 +90,62 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div><br><br>
+    <h2 style="text-align: center; margin-bottom: 0%;">Veja séries premiadas Apple Originals em todos os ecrãs.</h2>
+    <div id="image-carousel" class="splide">
+        <div class="splide__track">
+            <ul class="splide__list">
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Echo Valley.png') }}" alt="Imagem 1"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Fonte da Juventude.png') }}" alt="Imagem 2"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Jovens Rebeldes.png') }}" alt="Imagem 3"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Separação.png') }}" alt="Imagem 4"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Stick.png') }}" alt="Imagem 5"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Ted Lasso.png') }}" alt="Imagem 6"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/The Morning Show.png') }}" alt="Imagem 7"></li>
+            </ul>
+        </div>
+    </div>
+    <h2 style="text-align: center; margin-bottom: 0%;">A melhor coleção de jogos em dispositivos móveis para todo o tipo de jogadores.</h2>
+    <div id="second-carousel" class="splide">
+        <div class="splide__track">
+            <ul class="splide__list">
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Angry Birds Boune.png') }}" alt="Imagem 8"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Balatro+.png') }}" alt="Imagem 9"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Cooking Mama Cousine.png') }}" alt="Imagem 10"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Disney Dreamlight Valley.png') }}" alt="Imagem 11"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/NBA 2K25 Arcade Edition.png') }}" alt="Imagem 12"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Slay the Spire+.png') }}" alt="Imagem 13"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Taiko no Tatsujin Pop Tap Beat.png') }}" alt="Imagem 14"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/Temple Run.png') }}" alt="Imagem 15"></li>
+                <li class="splide__slide"><img src="{{ url_for('static', filename='images/Entretenimento/WHAT THE CLASH.png') }}" alt="Imagem 16"></li>
+            </ul>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.4.2/dist/js/splide-extension-auto-scroll.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new Splide('#image-carousel', {
+                type: 'loop',
+                perPage: 3,
+                gap: '1rem',
+                drag: 'free',
+                direction: 'ltr',
+                autoScroll: {
+                    speed: 1,
+                },
+            }).mount({ AutoScroll: window.splide.Extensions.AutoScroll });
+            new Splide('#second-carousel', {
+                type: 'loop',
+                perPage: 4,
+                gap: '1rem',
+                drag: 'free',
+                direction: 'ltr',
+                arrows: false,
+                pagination: false,
+                autoScroll: {
+                    speed: 1.5,
+                },
+            }).mount({ AutoScroll: window.splide.Extensions.AutoScroll });
+        });
+    </script>
 {% endblock %}
