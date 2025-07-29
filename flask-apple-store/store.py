@@ -159,7 +159,105 @@ def recover_password():
 
     return render_template("recoverpassword.html", categoria_data=select_from_database("SELECT * FROM categorias"))
 
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    cliente_email = session.get('email')
+    if not cliente_email:
+        return redirect("/login")
 
+    cliente_id = session.get("clienteid")
+    encomendas = []
+
+    if request.method == "POST":
+        rua = request.form.get("rua")
+        codigo_postal = request.form.get("codigo_postal")
+        cidade = request.form.get("cidade")
+        pais = request.form.get("pais")
+        novo_email = request.form.get("email")
+        novo_telefone = request.form.get("telefone")
+        nova_password = request.form.get("password")
+
+        try:
+            connection = pymysql.connect(
+                host='127.0.0.1',
+                port=3306,
+                user='root',
+                password='',
+                database='loja_online',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            with connection.cursor() as cursor:
+                if nova_password:
+                    hashed = hash_password(nova_password)
+                    cursor.execute("""
+                        UPDATE clientes
+                        SET Email = %s, Telefone = %s, Password = %s
+                        WHERE ClienteID = %s
+                    """, (novo_email, novo_telefone, hashed, cliente_id))
+                else:
+                    cursor.execute("""
+                        UPDATE clientes
+                        SET Email = %s, Telefone = %s
+                        WHERE ClienteID = %s
+                    """, (novo_email, novo_telefone, cliente_id))
+
+                cursor.execute("SELECT MoradaID FROM clientes WHERE ClienteID = %s", (cliente_id,))
+                morada_info = cursor.fetchone()
+                morada_id = morada_info["MoradaID"] if morada_info else None
+
+                if rua and cidade and codigo_postal and pais:
+                    if morada_id:
+                        cursor.execute("""
+                            UPDATE moradas
+                            SET Rua = %s, Cidade = %s, Codigo_postal = %s, Pais = %s
+                            WHERE MoradaID = %s
+                        """, (rua, cidade, codigo_postal, pais, morada_id))
+                    else:
+                        cursor.execute("""
+                            INSERT INTO moradas (Rua, Cidade, Codigo_postal, Pais)
+                            VALUES (%s, %s, %s, %s)
+                        """, (rua, cidade, codigo_postal, pais))
+                        nova_morada_id = cursor.lastrowid
+                        cursor.execute("""
+                            UPDATE clientes SET MoradaID = %s WHERE ClienteID = %s
+                        """, (nova_morada_id, cliente_id))
+
+                connection.commit()
+
+                session["email"] = novo_email
+                session["telefone"] = novo_telefone
+
+        except Exception as e:
+            return f"<p>Erro ao atualizar perfil: {e}</p>"
+        finally:
+            connection.close()
+
+        return redirect("/profile")
+
+    morada = None
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT m.*
+                FROM clientes c
+                LEFT JOIN moradas m ON c.MoradaID = m.MoradaID
+                WHERE c.ClienteID = %s
+            """, (cliente_id,))
+            morada = cursor.fetchone()
+    except Exception:
+        morada = None
+    finally:
+        connection.close()
+
+    return render_template("profile.html", categoria_data=select_from_database("SELECT * FROM categorias"), encomendas=encomendas, morada=morada)
 
 
 

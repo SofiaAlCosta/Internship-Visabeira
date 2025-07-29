@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <style>
+        .col-25 {
+            float: left;
+            width: 40%;
+            margin-top: 6px;
+        }
+
+        .col-75 {
+            float: left;
+            width: 60%;
+            margin-top: 6px;
+        }
+
+        .dadosconta {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .campo-bloqueado {
+            background-color: #f0f0f0 !important;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #botoes-perfil {
+            display: flex;
+            gap: 10px;
+            margin-left: 5%;
+            margin-top: 2%;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #botoes-perfil form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .botao {
+            border: none;
+            border-radius: 10px;
+            height: 40px;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+
+        .azul {
+            background-color: rgb(104, 174, 255);
+        }
+
+        .verde {
+            background-color: rgb(0, 168, 89);
+            color: white;
+        }
+
+        .vermelho {
+            background-color: red;
+            color: white;
+        }
+    </style>
+    <div style="background-color: #e1dbe2; height: 200px;">
+        <h2 style="padding-left: 5%; padding-top: 2%;"><strong>Olá, {{ session['nome'] }}</strong></h2>
+        {% if session['foto'] %}
+            <img src="{{ url_for('static', filename='uploads/' ~ session['foto']) }}"
+                alt="Foto de perfil"
+                style="width: 100px; height: 100px; border-radius: 50%; margin-left: 5%; object-fit: cover; border: 2px solid #555;">
+        {% endif %}
+        <div id="botoes-perfil">
+            <button id="editar-perfil-btn" onclick="ativarModoEdicao()" class="botao azul">
+                Editar Perfil
+            </button>
+
+            <form method="POST" action="/upload_foto" enctype="multipart/form-data" id="upload-foto" class="hidden">
+                <input type="file" name="foto" accept="image/*">
+                <button type="submit" class="botao azul">Upload Foto</button>
+            </form>
+
+            <button type="submit" form="form-editar" id="salvar-perfil" class="botao verde hidden">
+                Salvar
+            </button>
+
+            <a href="/logout" id="logout-link" style="text-decoration: none;">
+                <button class="botao azul">Terminar sessão</button>
+            </a>
+        </div>
+    </div>
+
+    <h2 style="text-align: center; margin-bottom: 0%; background-color: rgb(230, 230, 230);">Dados</h2>
+    <div class="dadosconta">
+        <form method="POST" id="form-editar">
+            <div class="row">
+                <div class="col-25"><label>Nome:</label></div>
+                <div class="col-75">
+                    <input type="text" id="nome" value="{{ session['nome'] }}" readonly class="campo-bloqueado">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label>Email:</label></div>
+                <div class="col-75">
+                    <input type="text" id="email" name="email" value="{{ session['email'] }}" readonly>
+                </div>
+            </div>
+            <div class="row" id="linha-password" style="display: none;">
+                <div class="col-25"><label>Mudar Password:</label></div>
+                <div class="col-75">
+                    <input type="password" id="password" name="password">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label>Telefone:</label></div>
+                <div class="col-75">
+                    <input type="text" id="telefone" name="telefone" value="{{ session['telefone'] }}" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    {% if morada %}
+                    <div id="morada-preview">
+                        <p><strong>Rua:</strong> {{ morada['Rua'] }}</p>
+                        <p><strong>Código-Postal:</strong> {{ morada['Codigo_postal'] }}</p>
+                        <p><strong>Cidade:</strong> {{ morada['Cidade'] }}</p>
+                        <p><strong>País:</strong> {{ morada['Pais'] }}</p>
+                    </div>
+                    {% else %}
+                    <div id="morada-preview" style="display: none;"></div>
+                    {% endif %}
+                    <button id="botao-morada" type="button" onclick="mostrarMorada()" class="botao azul hidden">
+                        {% if morada %}Trocar morada{% else %}Adicionar morada{% endif %}
+                    </button>
+                </div>
+                <div class="col-75" id="formulario-morada" style="display: none;">
+                    <label for="input-rua">Rua:</label>
+                    <input type="text" name="rua" id="input-rua">
+                    <label for="input-codigo">Código-Postal:</label>
+                    <input type="text" name="codigo_postal" id="input-codigo">
+                    <label for="input-cidade">Cidade:</label>
+                    <input type="text" name="cidade" id="input-cidade">
+                    <label for="input-pais">País:</label>
+                    <input type="text" name="pais" id="input-pais">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label>Data de Nascimento:</label></div>
+                <div class="col-75">
+                    <input type="text" id="data-nascimento" value="{{ session['data_nascimento'][:16] }}" readonly class="campo-bloqueado">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-25"><label>Género:</label></div>
+                <div class="col-75">
+                    <input type="text" id="genero" value="{{ session['genero'] }}" readonly class="campo-bloqueado">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let modoEdicaoAtivo = false;
+
+        function ativarModoEdicao() {
+            if (modoEdicaoAtivo) return;
+            modoEdicaoAtivo = true;
+
+            document.getElementById("email").removeAttribute("readonly");
+            document.getElementById("telefone").removeAttribute("readonly");
+
+            document.getElementById("linha-password").style.display = "flex";
+            document.getElementById("botao-morada").classList.remove("hidden");
+
+            document.getElementById("upload-foto").classList.remove("hidden");
+            document.getElementById("salvar-perfil").classList.remove("hidden");
+
+            document.getElementById("editar-perfil-btn").style.display = "none";
+            document.getElementById("logout-link").classList.add("hidden");
+        }
+
+        function mostrarMorada() {
+            const form = document.getElementById("formulario-morada");
+            const campos = form.querySelectorAll("input");
+            const mostrar = form.style.display === "none" || form.style.display === "";
+            form.style.display = mostrar ? "block" : "none";
+            campos.forEach(input => input.required = mostrar);
+        }
+    </script>
+{% endblock %}
