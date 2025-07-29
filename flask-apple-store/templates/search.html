@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Resultados da Pesquisa{% endblock %}
+
+{% block content %}
+    <style>
+        .produto-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-bottom: 15px;
+            margin-top: 30px;
+            background-color: #f9f9f9;
+        }
+
+        .produto-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .produto-info img {
+            width: 200px;
+            height: 200px;
+            border-radius: 6px;
+            margin-right: 20px;
+        }
+
+        .produto-nome {
+            font-size: 22px;
+            font-weight: bold;
+            margin-left: 20px;
+            text-decoration: none;
+        }
+
+        .produto-detalhes {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .produto-preco {
+            font-size: 20px;
+            font-weight: bold;
+            color: black;
+        }
+    </style>
+    <div class="container mt-4">
+        <h2>Resultados para "{{ termo }}"</h2>
+        <form method="get" class="row g-3 mb-4">
+            <input type="hidden" name="q" value="{{ termo }}">
+            <div class="col-md-4">
+                <label class="form-label">Categoria:</label>
+                <select name="categoria_id" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Todas --</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat.CategoriaID }}" {% if categoria_id == cat.CategoriaID %}selected{% endif %}>
+                            {{ cat.Nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="ordenar" class="form-label">Ordenar por:</label>
+                <select name="ordenar" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Selecione --</option>
+                    <option value="preco_asc" {% if ordenar == 'preco_asc' %}selected{% endif %}>Preço: Mais baixo</option>
+                    <option value="preco_desc" {% if ordenar == 'preco_desc' %}selected{% endif %}>Preço: Mais alto</option>
+                    <option value="novos" {% if ordenar == 'novos' %}selected{% endif %}>Mais recentes</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="preco_max" class="form-label">Preço máximo:</label>
+                <input type="number" class="form-control" name="preco_max" value="{{ preco_max or '' }}" onchange="this.form.submit()">
+            </div>
+        </form>
+        {% if produtos %}
+            {% for produto in produtos %}
+                <div class="produto-item">
+                    <div class="produto-info">
+                        <a href="/product/{{ produto.ProdutoID }}">
+                            <img src="{{ url_for('static', filename='images/Produtos/' + produto.Capa) }}">
+                        </a>
+                        <div class="produto-detalhes">
+                            <a href="/product/{{ produto.ProdutoID }}" class="produto-nome">{{ produto.Nome }}</a>
+                        </div>
+                    </div>
+                    <div class="produto-preco">{{ produto.Preco }} €</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Nenhum produto encontrado.</p>
+        {% endif %}
+    </div>
+{% endblock %}

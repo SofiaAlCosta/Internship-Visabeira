@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, flash
+from flask import Flask, render_template, redirect, request, session, flash, jsonify
 import pymysql.cursors
 import sys
 import hashlib
@@ -390,6 +390,70 @@ def remover_favorito(produto_id):
     execute_query(query, (cliente_id, produto_id))
 
     return redirect("/favoritos")
+
+@app.route("/pesquisa")
+def pesquisa():
+    termo = request.args.get("q", "").strip()
+    ordenar = request.args.get("ordenar", "")
+    preco_max = request.args.get("preco_max", "")
+    categoria_id = request.args.get("categoria_id", "")
+
+    if not termo:
+        return render_template(
+            "search.html",
+            produtos=[],
+            termo="",
+            ordenar=ordenar,
+            preco_max=preco_max,
+            categoria_id=categoria_id,
+            categorias=select_from_database("SELECT * FROM categorias"),
+            categoria_data=select_from_database("SELECT * FROM categorias")
+        )
+
+    query = """
+        SELECT p.*
+        FROM produto p
+        LEFT JOIN categoria_produto cp ON p.ProdutoID = cp.ProdutoID
+        WHERE LOWER(p.Nome) LIKE %s
+    """
+    params = [f"%{termo.lower()}%"]
+
+    if categoria_id:
+        query += " AND cp.CategoriaID = %s"
+        params.append(categoria_id)
+
+    if preco_max:
+        query += " AND p.Preco <= %s"
+        params.append(preco_max)
+
+    if ordenar == "preco_asc":
+        query += " ORDER BY p.Preco ASC"
+    elif ordenar == "preco_desc":
+        query += " ORDER BY p.Preco DESC"
+    elif ordenar == "novos":
+        query += " ORDER BY p.ProdutoID DESC"
+
+    resultados = select_from_database(query, params)
+
+    return render_template(
+        "search.html",
+        produtos=resultados,
+        termo=termo,
+        ordenar=ordenar,
+        preco_max=preco_max,
+        categoria_id=int(categoria_id) if categoria_id else "",
+        categorias=select_from_database("SELECT * FROM categorias"),
+        categoria_data=select_from_database("SELECT * FROM categorias")
+    )
+
+@app.route("/autocomplete")
+def autocomplete():
+    termo = request.args.get("q", "").lower()
+    resultados = select_from_database("""
+        SELECT ProdutoID, Nome FROM produto WHERE LOWER(Nome) LIKE %s LIMIT 5
+    """, [f"%{termo}%"])
+    return jsonify(resultados)
+
 
 
 
