@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+    <style>
+        #image-carousel {
+            max-width: 100%;
+            overflow: hidden;
+            margin: 4rem auto;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        .splide__list {
+            display: flex !important;
+            flex-direction: row !important;
+        }
+
+        .splide__slide {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .splide__slide img {
+            width: 300px;
+            height: auto;
+            display: block;
+        }
+
+        #image-carousel .splide__arrows {
+            display: none;
+        }
+
+        #image-carousel .splide__pagination {
+            display: none;
+        }
+
+        #second-carousel {
+            max-width: 100%;
+            overflow: hidden;
+            margin: 4rem auto;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        #second-carousel .splide__slide img {
+            width: 250px;
+            height: auto;
+            object-fit: cover;
+            display: block;
+        }
+    </style>
+    <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <a href="/product/1">
+                    <img src="{{ url_for('static', filename='images/iPhone 16.png') }}" class="d-block w-100" alt="iPhone 16">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="/product/3">
+                    <img src="{{ url_for('static', filename='images/iPad Pro.png') }}" class="d-block w-100" alt="iPad Pro">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="/product/2">
+                    <img src="{{ url_for('static', filename='images/MacBook Air.png') }}" class="d-block w-100" alt="MacBook Air">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="/product/4">
+                    <img src="{{ url_for('static', filename='images/Airpods4.jpg') }}" class="d-block w-100" alt="AirPods 4">
+                </a>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" style="background-color: rgba(118, 118, 118, 0.112);">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" style="background-color: rgba(118, 118, 118, 0.112);">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div><br><br>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-auto-scroll@0.4.2/dist/js/splide-extension-auto-scroll.min.js"></script>
+{% endblock %}

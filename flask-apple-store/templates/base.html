@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset ="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary main-navbar">
+            <div class="container-fluid">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Apple logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <form class="d-flex position-relative" role="search" action="/pesquisa" method="get" autocomplete="off">
+                        <input class="form-control me-2" type="search" id="pesquisa" name="q" placeholder="Pesquisar produto..." aria-label="Search" required>
+                        <button type="submit">Pesquisar</button>
+                        <ul id="sugestoes" class="list-group position-absolute w-100 mt-5" style="z-index: 1000;"></ul>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bg-dark text-light py-4 mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Apple Store</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="" class="text-light text-decoration-none">App Apple Store</a></li>
+                            <li><a href="" class="text-light text-decoration-none">Estado das Encomendas</a></li>
+                            <li><a href="#" class="text-light text-decoration-none">Ajuda para comprar</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Conta</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="" class="text-light text-decoration-none">Gerir a sua Conta Apple</a></li>
+                            <li><a href="" class="text-light text-decoration-none">iCloud.com</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Contacto</h5>
+                        <p>Email: support@applestore.com</p>
+                        <p>Telefone: +351 800 207 758</p>
+                    </div>
+                </div>
+                <hr class="border-light">
+                <p class="text-center mb-0">Copyright © 2025 Apple Inc. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
