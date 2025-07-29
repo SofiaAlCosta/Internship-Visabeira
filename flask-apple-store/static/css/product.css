@@ -300,3 +300,117 @@ hr{
   height: 100%;
   border: none;
 }
+
+.review-section {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 25px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.review-form textarea {
+  width: 100%;
+  height: 100px;
+  padding: 8px;
+  resize: vertical;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.review-form select,
+.review-form button {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.review-form button {
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.review-form button:hover {
+  background-color: #555;
+}
+
+.review-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.review-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+.review-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.review-form-container,
+.review-list-container {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.review-form textarea {
+  width: 100%;
+  height: 100px;
+  padding: 8px;
+  resize: vertical;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.review-form select,
+.review-form button {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.review-form button {
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.review-form button:hover {
+  background-color: #555;
+}
+
+.review-list {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.review-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
