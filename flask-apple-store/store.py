@@ -294,11 +294,102 @@ def apagar_conta():
     except Exception as e:
         return f"<p>Erro ao apagar conta: {e}</p>"
 
+@app.route("/product/<int:id>/review", methods=["POST"])
+def insertreview(id):
+    comentario = request.form.get("comentario")
+    cliente = session.get("clienteid")
+    if not cliente:
+        return redirect("/login")
+    avaliacao = request.form.get('avaliacao')
+    
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO `loja_online`.`reviews`
+                    (`ProdutoID`,
+                    `ClienteID`,
+                    `Comentario`,
+                    `Avaliacao`)
+                    VALUES
+                    (%s,%s,%s,%s);
+                """, (id, cliente, comentario, avaliacao)
+            )
+            connection.commit()
+        connection.close()
+        return redirect(f"/product/{id}")
+    except Exception as e:
+        return f"Erro"
 
+@app.route("/favoritos")
+def favoritos():
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
 
+    query = """
+        SELECT p.*
+        FROM favoritos f
+        JOIN produto p ON f.ProdutoID = p.ProdutoID
+        WHERE f.ClienteID = %s
+    """
+    produtos_favoritos = select_from_database(query, [cliente_id])
 
+    return render_template("wishlist.html",
+        produtos=produtos_favoritos,
+        categoria_data=select_from_database("SELECT * FROM categorias")
+    )
 
+@app.route("/toggle_favorito/<int:produto_id>", methods=["POST"])
+def toggle_favorito(produto_id):
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
 
+    connection = pymysql.connect(
+        host='127.0.0.1',
+        user='root',
+        password='',
+        database='loja_online',
+        cursorclass=pymysql.cursors.DictCursor
+    )
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM favoritos WHERE ClienteID = %s AND ProdutoID = %s
+        """, (cliente_id, produto_id))
+        existe = cursor.fetchone()
+
+        if existe:
+            cursor.execute("""
+                DELETE FROM favoritos WHERE ClienteID = %s AND ProdutoID = %s
+            """, (cliente_id, produto_id))
+        else:
+            cursor.execute("""
+                INSERT INTO favoritos (ClienteID, ProdutoID) VALUES (%s, %s)
+            """, (cliente_id, produto_id))
+
+        connection.commit()
+    connection.close()
+    return redirect(f"/product/{produto_id}")
+
+@app.route("/remover_favorito/<int:produto_id>", methods=["POST"])
+def remover_favorito(produto_id):
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    query = "DELETE FROM favoritos WHERE ClienteID = %s AND ProdutoID = %s"
+    execute_query(query, (cliente_id, produto_id))
+
+    return redirect("/favoritos")
 
 
 
@@ -339,6 +430,21 @@ def utility_functions():
 
 def hash_password(password):
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+def execute_query(query, params=None):
+    connection = pymysql.connect(
+        host='127.0.0.1',
+        user='root',
+        password='',
+        database='loja_online',
+        cursorclass=pymysql.cursors.DictCursor
+    )
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query, params)
+            connection.commit()
+    finally:
+        connection.close()
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

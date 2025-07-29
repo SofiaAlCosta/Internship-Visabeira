@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Favoritos{% endblock %}
+
+{% block content %}
+    <style>
+        .wishlist-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .wishlist-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .wishlist-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .wishlist-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+        }
+
+        .wishlist-info h4 {
+            margin: 0 0 10px;
+        }
+
+        .wishlist-info p {
+            margin: 5px 0;
+        }
+
+        .ver-produto,
+        .remover {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .ver-produto {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .remover {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+
+    <h2 style="text-align:center;">Os teus produtos favoritos</h2>
+
+    <div class="produtos-container">
+        <div class="wishlist-container">
+            {% for produto in produtos %}
+                <div class="wishlist-card">
+                <a href="/product/{{ produto.ProdutoID }}">
+                    <img src="{{ url_for('static', filename='images/Produtos/' + produto.Capa) }}">
+                </a>
+                <div class="wishlist-info">
+                    <a href="/product/{{ produto.ProdutoID }}" style="font-size: 20px; text-decoration: none; color: black; font-weight: bold;">{{ produto.Nome }}</a>
+                    <p><strong>Preço:</strong> {{ produto.Preco }}€</p>
+                    <div class="wishlist-buttons">
+                        <form action="/adicionar_ao_carrinho/{{ produto.ProdutoID }}" method="post">
+                            <button class="ver-produto">Mover para o carrinho</button>
+                        </form>
+                        <form action="/remover_favorito/{{ produto.ProdutoID }}" method="post">
+                            <button class="remover">Remover</button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if not produtos %}
+        <p style="text-align: center;">Ainda não adicionaste produtos aos teus favoritos.</p>
+    {% endif %}
+{% endblock %}

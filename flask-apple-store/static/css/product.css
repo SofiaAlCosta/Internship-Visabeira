@@ -414,3 +414,19 @@ hr{
   margin-bottom: 10px;
   border-radius: 6px;
 }
+
+.favorite {
+  margin-top: 4%;
+  width: 370px;
+  height: 50px;
+  background-color: rgb(229, 229, 229);
+  color: black;
+  font-weight: bold;
+  font-size: 75%;
+  cursor: pointer;
+  border-color: rgb(116, 116, 116);
+}
+
+.favorite:hover {
+  background-color: #c4c4c4;
+}

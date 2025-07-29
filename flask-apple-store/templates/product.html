@@ -32,6 +32,15 @@
             <form action="/adicionar_ao_carrinho/{{ product.ProdutoID }}" method="post">
                 <button type="submit" class="comprar">Adicionar ao carrinho</button>
             </form>
+            <form method="POST" action="/toggle_favorito/{{ product.ProdutoID }}">
+                <button class="favorite">
+                {% if session['clienteid'] and product.ProdutoID in session.get('favoritos_ids', []) %}
+                    Remover dos Favoritos
+                {% else %}
+                    ❤️ Adicionar aos Favoritos
+                {% endif %}
+                </button>
+            </form>
         </div>
     </div>
     <div id="videoModal" class="video-modal">
