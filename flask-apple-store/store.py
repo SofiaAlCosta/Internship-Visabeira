@@ -555,6 +555,110 @@ def adicionar_ao_carrinho(produto_id):
 
     except Exception as e:
         return f"<p>Erro ao adicionar ao carrinho: {e}</p>"
+    
+@app.route("/remover_do_carrinho/<int:produto_id>", methods=["POST"])
+def remover_do_carrinho(produto_id):
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+
+            if not carrinho:
+                return redirect("/cart")
+
+            carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                DELETE FROM carrinho_produtos
+                WHERE CarrinhoID = %s AND ProdutoID = %s
+            """, (carrinho_id, produto_id))
+            connection.commit()
+
+        connection.close()
+        return redirect("/cart")
+
+    except Exception as e:
+        return f"<p>Erro ao remover produto do carrinho: {e}</p>"
+
+@app.route("/atualizar_quantidade/<int:produto_id>", methods=["POST"])
+def atualizar_quantidade(produto_id):
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    operacao = request.form.get("operacao") 
+
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+            if not carrinho:
+                return redirect("/cart")
+
+            carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                SELECT Quantidade FROM carrinho_produtos
+                WHERE CarrinhoID = %s AND ProdutoID = %s
+            """, (carrinho_id, produto_id))
+            existente = cursor.fetchone()
+
+            if not existente:
+                return redirect("/cart")
+
+            qtd_atual = existente["Quantidade"]
+
+            if operacao == "incrementar":
+                nova_qtd = qtd_atual + 1
+            elif operacao == "decrementar":
+                nova_qtd = qtd_atual - 1
+            else:
+                return redirect("/cart")
+
+            if nova_qtd <= 0:
+                cursor.execute("""
+                    DELETE FROM carrinho_produtos
+                    WHERE CarrinhoID = %s AND ProdutoID = %s
+                """, (carrinho_id, produto_id))
+            else:
+                cursor.execute("""
+                    UPDATE carrinho_produtos
+                    SET Quantidade = %s
+                    WHERE CarrinhoID = %s AND ProdutoID = %s
+                """, (nova_qtd, carrinho_id, produto_id))
+
+            connection.commit()
+
+        connection.close()
+        return redirect("/cart")
+
+    except Exception as e:
+        return f"<p>Erro ao atualizar quantidade: {e}</p>"
+
+
+
 
 
 def select_from_database(select_query, params=None):
