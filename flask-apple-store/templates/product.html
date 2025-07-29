@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.Nome }}{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product.css') }}">
+    <input id="ProdutoID" type="hidden" value="{{product.ProdutoID}}" />
+    <div class="flex-container">
+        <div class="left-panel">
+            <div class="slideshow-container">
+                {% for img in product.Imagens %}
+                <div class="mySlide customFade" style="display: block;">
+                    <img src="{{ url_for('static', filename='images/Produtos/' + img) }}">
+                </div>
+                {% endfor %}
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+
+            <div style="text-align:center">
+                {% for _ in product.Imagens %}
+                <span class="dot" onclick="currentSlide('{{ loop.index }}')"></span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h3 style="font-weight: bold;">{{ product.Nome }}</h3>
+            <p id="openVideoModal" style="font-size: 16px; color: blue; text-decoration: underline; cursor: pointer;">Veja em ação o novo {{ product.Nome }}</p><br>
+            <h5 id="productprice" style="font-weight: bold; font-size: 24px;">Desde {{ product.Preco }}€</h5><hr>
+            <form action="/adicionar_ao_carrinho/{{ product.ProdutoID }}" method="post">
+                <button type="submit" class="comprar">Adicionar ao carrinho</button>
+            </form>
+        </div>
+    </div>
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <span class="video-close">&times;</span>
+            <iframe width="100%" height="315"
+                src="{{ product.VideoURL }}"
+                title="{{ product.Nome }}" frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/product.js') }}"></script>
+{% endblock %}
