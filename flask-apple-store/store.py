@@ -657,6 +657,59 @@ def atualizar_quantidade(produto_id):
     except Exception as e:
         return f"<p>Erro ao atualizar quantidade: {e}</p>"
 
+@app.route("/checkout", methods=["POST"])
+def checkout():
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+            if not carrinho:
+                return "<p>O seu carrinho está vazio.</p>"
+
+            carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                SELECT p.ProdutoID, p.Nome, p.Preco, cp.Quantidade, p.Capa
+                FROM carrinho_produtos cp
+                JOIN produto p ON cp.ProdutoID = p.ProdutoID
+                WHERE cp.CarrinhoID = %s
+            """, (carrinho_id,))
+            produtos = cursor.fetchall()
+            if not produtos:
+                return "<p>O seu carrinho está vazio.</p>"
+
+            cursor.execute("""
+                SELECT m.*
+                FROM moradas m
+                JOIN clientes c ON c.MoradaID = m.MoradaID
+                WHERE c.ClienteID = %s
+            """, (cliente_id,))
+            morada = cursor.fetchone()
+            if not morada:
+                return "<p>Precisa de adicionar uma morada antes de finalizar a compra.</p>"
+
+        connection.close()
+
+        total = sum(p["Preco"] * p["Quantidade"] for p in produtos)
+
+        return render_template("checkout.html", produtos=produtos, total=total, morada=morada, categoria_data=select_from_database("SELECT * FROM categorias"))
+
+    except Exception as e:
+        return f"<p>Erro no checkout: {e}</p>"
+
 
 
 
