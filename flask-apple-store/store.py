@@ -454,7 +454,107 @@ def autocomplete():
     """, [f"%{termo}%"])
     return jsonify(resultados)
 
+@app.route("/cart")
+def cart():
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
 
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+
+            if not carrinho:
+                return render_template("cart.html", produtos=[], total=0, categoria_data=select_from_database("SELECT * FROM categorias"))
+
+            carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                SELECT p.Nome, p.Preco, p.Capa, p.ProdutoID, cp.Quantidade
+                FROM carrinho_produtos cp
+                JOIN produto p ON cp.ProdutoID = p.ProdutoID
+                WHERE cp.CarrinhoID = %s
+            """, (carrinho_id,))
+            produtos = cursor.fetchall()
+
+        connection.close()
+
+        for p in produtos:
+            p["subtotal"] = p["Preco"] * p["Quantidade"]
+
+        total = sum(p["subtotal"] for p in produtos)
+
+        return render_template("cart.html", produtos=produtos, total=total, categoria_data=select_from_database("SELECT * FROM categorias"))
+
+    except Exception as e:
+        return f"<p>Erro ao carregar carrinho: {e}</p>"
+
+@app.route("/adicionar_ao_carrinho/<int:produto_id>", methods=["POST"])
+def adicionar_ao_carrinho(produto_id):
+    cliente_id = session.get("clienteid")
+    if not cliente_id:
+        return redirect("/login")
+
+    try:
+        connection = pymysql.connect(
+            host='127.0.0.1',
+            port=3306,
+            user='root',
+            password='',
+            database='loja_online',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT CarrinhoID FROM carrinhos WHERE ClienteID = %s", (cliente_id,))
+            carrinho = cursor.fetchone()
+
+            if not carrinho:
+                cursor.execute("INSERT INTO carrinhos (ClienteID, Data) VALUES (%s, NOW())", (cliente_id,))
+                connection.commit()
+                carrinho_id = cursor.lastrowid
+            else:
+                carrinho_id = carrinho["CarrinhoID"]
+
+            cursor.execute("""
+                SELECT Quantidade FROM carrinho_produtos
+                WHERE CarrinhoID = %s AND ProdutoID = %s
+            """, (carrinho_id, produto_id))
+            existente = cursor.fetchone()
+
+            if existente:
+                nova_qtd = existente["Quantidade"] + 1
+                cursor.execute("""
+                    UPDATE carrinho_produtos
+                    SET Quantidade = %s
+                    WHERE CarrinhoID = %s AND ProdutoID = %s
+                """, (nova_qtd, carrinho_id, produto_id))
+            else:
+                cursor.execute("""
+                    INSERT INTO carrinho_produtos (CarrinhoID, ProdutoID, Quantidade)
+                    VALUES (%s, %s, 1)
+                """, (carrinho_id, produto_id))
+                # Remover o produto da wishlist (favoritos)
+                cursor.execute("""
+                    DELETE FROM favoritos WHERE ClienteID = %s AND ProdutoID = %s
+                """, (cliente_id, produto_id))
+
+            connection.commit()
+        connection.close()
+        return redirect("/cart")
+
+    except Exception as e:
+        return f"<p>Erro ao adicionar ao carrinho: {e}</p>"
 
 
 def select_from_database(select_query, params=None):

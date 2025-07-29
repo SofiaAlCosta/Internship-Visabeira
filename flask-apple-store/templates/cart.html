@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Carrinho de Compras{% endblock %}
+
+{% block content %}
+<style>
+    .cart-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f8f8f8;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .cart-container h2 {
+        margin-bottom: 25px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    .cart-items {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .cart-item img {
+        width: 100px;
+        border-radius: 8px;
+        margin-right: 20px;
+    }
+
+    .item-details {
+        flex: 1;
+    }
+
+    .item-details h4 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .item-details p {
+        margin: 4px 0;
+        color: #333;
+    }
+
+    .item-details .subtotal {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .remove-btn {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .remove-btn:hover {
+        background: #c0392b;
+    }
+
+    .cart-summary {
+        margin-top: 30px;
+        text-align: right;
+    }
+
+    .checkout-btn {
+        background-color: #0071e3;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: not-allowed;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+    }
+
+    .quantity-btn {
+        background-color: #ccc;
+        border: none;
+        padding: 4px 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .quantity-btn:hover {
+        background-color: #aaa;
+    }
+
+    .quantity-value {
+        font-weight: bold;
+    }
+</style>
+
+<div class="cart-container">
+    <h2>Carrinho de Compras</h2>
+    {% if produtos %}
+        <div class="cart-items">
+            {% for p in produtos %}
+                <div class="cart-item">
+                    <img src="{{ url_for('static', filename='images/Produtos/' + p.Capa) }}" alt="{{ p.Nome }}">
+                    <div class="item-details">
+                        <h4>{{ p.Nome }}</h4>
+                        <div class="quantity-controls">
+                            <form action="/atualizar_quantidade/{{ p.ProdutoID }}" method="post" style="display:inline;">
+                                <input type="hidden" name="operacao" value="decrementar">
+                                <button type="submit" class="quantity-btn">-</button>
+                            </form>
+                            <span class="quantity-value">{{ p.Quantidade }}</span>
+                            <form action="/atualizar_quantidade/{{ p.ProdutoID }}" method="post" style="display:inline;">
+                                <input type="hidden" name="operacao" value="incrementar">
+                                <button type="submit" class="quantity-btn">+</button>
+                            </form>
+                        </div>
+                        <p class="subtotal">Subtotal: {{ "%.2f"|format(p.Preco * p.Quantidade) }} €</p>
+                    </div>
+                    <form action="/remover_do_carrinho/{{ p.ProdutoID }}" method="post">
+                        <button class="remove-btn" type="submit">Remover</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="cart-summary">
+            <h3>Total: {{ "%.2f"|format(total) }} €</h3>
+            <form action="/checkout" method="post">
+                <button class="checkout-btn" type="submit">Finalizar compra</button>
+            </form>
+        </div>
+    {% else %}
+        <p>O seu carrinho está vazio.</p>
+    {% endif %}
+</div>
+{% endblock %}
