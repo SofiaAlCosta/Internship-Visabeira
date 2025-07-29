@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <style>
+        .register-form {
+            width: 50%;
+            margin-top: 1%;
+            margin-left: 25%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        #message {
+            display:none;
+            background: #f1f1f1;
+            color: #000;
+            position: relative;
+            padding: 20px;
+            margin-top: 10px;
+            width: 760px;
+            height: 275px;
+            margin-left: 25%;
+        }
+
+        #message p {
+            padding: 7px 20px;
+            font-size: 16px;
+        }
+
+        .valid {
+            color: green;
+        }
+
+        .valid:before {
+            position: relative;
+            left: -20px;
+            content: "✔";
+        }
+
+        .invalid {
+            color: red;
+        }
+
+        .invalid:before {
+            position: relative;
+            left: -20px;
+            content: "✖";
+        }
+    </style>
+    <form class="register-form" method="POST" action="/register">
+        <label for="name"><b>Name</b></label><br>
+        <input type="text" id="name" name="nome" placeholder="Insira o nome completo"><br>
+        <label for="email"><b>Email</b></label><br>
+        <input type="text" id="email" name="email" placeholder="abc@exemplo.com"><br>
+        <label for="phone"><b>Telefone</b></label><br>
+        <input type="text" id="phone" name="telefone" placeholder="Nº de telefone"><br>
+        <label for="data_nascimento"><b>Data de Nascimento</b></label><br>
+        <input type="text" id="data_nascimento" name="data_nascimento" placeholder="AAAA-MM-DD"><br>
+        <label for="genero"><b>Género</b></label><br>
+        <select id="genero" name="genero">
+            <option value="">Escolha</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+        </select><br>
+        <label for="password"><b>Palavra-passe</b></label><br>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Deve conter pelo menos um número e uma letra maiúscula e minúscula, e ter pelo menos 8 caracteres" placeholder="Insira a sua palavra-passe" required><br>
+        <input type="submit" id="submit" value="Registar"><br>
+    </form>
+    <div id="message">
+        <h4>A palavra-passe deve conter o seguinte:</h4>
+        <p id="letter" class="invalid">A <b>letra minúscula</b></p>
+        <p id="capital" class="invalid">A <b>letra maiúscula</b></p>
+        <p id="number" class="invalid">Um <b>número</b></p>
+        <p id="length" class="invalid">Mínimo de <b>8 caracteres</b></p>
+    </div>
+    <script>
+        var myInput = document.getElementById("password");
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+
+        myInput.onfocus = function() {
+        document.getElementById("message").style.display = "block";
+        }
+
+        myInput.onblur = function() {
+        document.getElementById("message").style.display = "none";
+        }
+
+        myInput.onkeyup = function() {
+            var lowerCaseLetters = /[a-z]/g;
+            if(myInput.value.match(lowerCaseLetters)) {  
+                letter.classList.remove("invalid");
+                letter.classList.add("valid");
+            } else {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
+            }
+        
+            var upperCaseLetters = /[A-Z]/g;
+            if(myInput.value.match(upperCaseLetters)) {  
+                capital.classList.remove("invalid");
+                capital.classList.add("valid");
+            } else {
+                capital.classList.remove("valid");
+                capital.classList.add("invalid");
+            }
+
+            var numbers = /[0-9]/g;
+            if(myInput.value.match(numbers)) {  
+                number.classList.remove("invalid");
+                number.classList.add("valid");
+            } else {
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+            }
+            
+            if(myInput.value.length >= 8) {
+                length.classList.remove("invalid");
+                length.classList.add("valid");
+            } else {
+                length.classList.remove("valid");
+                length.classList.add("invalid");
+            }
+        }
+    </script>
+{% endblock %}

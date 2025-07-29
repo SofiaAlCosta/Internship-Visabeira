@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, session, flash
 import pymysql.cursors
 import sys
+import hashlib
 
 app = Flask(__name__)
 
@@ -42,7 +43,84 @@ def product(id):
         "Cores": cores
     }, categoria_data=select_from_database("SELECT * FROM categorias"), reviews=reviews)
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if app.logger:
+        app.logger.debug("Rota de registo acionada")
 
+    if request.method == "POST":
+        nome = request.form.get("nome")
+        email = request.form.get("email")
+        telefone = request.form.get("telefone")
+        data_nascimento = request.form.get("data_nascimento")
+        genero = request.form.get("genero")
+        raw_password = request.form.get("password")
+        password = hash_password(raw_password)
+
+        try:
+            connection = pymysql.connect(
+                host='127.0.0.1',
+                port=3306,
+                user='root',
+                password='',
+                database='loja_online',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """
+                    INSERT INTO clientes (Nome, Email, Telefone, Data_Nascimento, Genero, Password)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    """,
+                    (nome, email, telefone, data_nascimento, genero, password)
+                )
+                connection.commit()
+            connection.close()
+            return render_template("login.html", success=True, categoria_data=select_from_database("SELECT * FROM categorias"))
+        except Exception as e:
+            return f"<p>Erro ao registar: {e}</p>"
+    return render_template("register.html", categoria_data=select_from_database("SELECT * FROM categorias"))
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        raw_password = request.form.get("password")
+        hashed_password = hash_password(raw_password)
+
+        try:
+            connection = pymysql.connect(
+                host='127.0.0.1',
+                port=3306,
+                user='root',
+                password='',
+                database='loja_online',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT * FROM clientes WHERE Email = %s AND Password = %s",
+                    (email, hashed_password)
+                )
+                user = cursor.fetchone()
+
+            connection.close()
+
+            if user:
+                session['nome'] = user['Nome']
+                session['email'] = user['Email']
+                session['telefone'] = user.get('Telefone', '')
+                session['data_nascimento'] = user.get('Data_Nascimento', '')
+                session['genero'] = user.get('Genero', '')
+                session['clienteid'] = user.get('ClienteID', '')
+                return redirect("/")
+            else:
+                flash("Credenciais inválidas. Tente novamente.")
+                return redirect("/login")
+
+        except Exception as e:
+            return f"<p>Erro ao tentar fazer login: {e}</p>"
+    return render_template("login.html", categoria_data=select_from_database("SELECT * FROM categorias"))
 
 def select_from_database(select_query, params=None):
     rt = []
@@ -78,6 +156,9 @@ def utility_functions():
         """
         return select_from_database(query, [categoria_id])
     return dict(get_produtos_por_categoria=get_produtos_por_categoria)
+
+def hash_password(password):
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
