@@ -2,8 +2,11 @@ from flask import Flask, render_template, redirect, request, session, flash
 import pymysql.cursors
 import sys
 import hashlib
+from datetime import datetime, timedelta
+import uuid
 
 app = Flask(__name__)
+app.secret_key = "minha_chave_super_secreta_123"
 
 @app.route("/")
 def home():
@@ -121,6 +124,52 @@ def login():
         except Exception as e:
             return f"<p>Erro ao tentar fazer login: {e}</p>"
     return render_template("login.html", categoria_data=select_from_database("SELECT * FROM categorias"))
+
+@app.route("/recoverpassword", methods=["GET", "POST"])
+def recover_password():
+    if request.method == "POST":
+        email = request.form.get("email")
+        cliente = select_from_database("SELECT ClienteID FROM clientes WHERE Email = %s", [email])
+        if not cliente:
+            return "<p>Email não encontrado.</p>"
+
+        cliente_id = cliente[0]["ClienteID"]
+        token = str(uuid.uuid4())
+        expira = datetime.now() + timedelta(hours=1)
+
+        try:
+            connection = pymysql.connect(
+                host='127.0.0.1', user='root', password='', database='loja_online',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    INSERT INTO tokens_recuperacao (ClienteID, Token, ExpiraEm)
+                    VALUES (%s, %s, %s)
+                """, (cliente_id, token, expira))
+                connection.commit()
+            connection.close()
+
+            # Simula envio de email
+            link = f"http://127.0.0.1:5000/reset_password/{token}"
+            return f"<p>Link de recuperação (simulado): <a href='{link}'>{link}</a></p>"
+
+        except Exception as e:
+            return f"<p>Erro ao gerar token: {e}</p>"
+
+    return render_template("recoverpassword.html", categoria_data=select_from_database("SELECT * FROM categorias"))
+
+
+
+
+
+
+
+
+
+
+
+
 
 def select_from_database(select_query, params=None):
     rt = []
