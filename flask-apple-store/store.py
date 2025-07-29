@@ -4,6 +4,8 @@ import sys
 import hashlib
 from datetime import datetime, timedelta
 import uuid
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = "minha_chave_super_secreta_123"
@@ -235,6 +237,7 @@ def profile():
         return redirect("/profile")
 
     morada = None
+    encomendas = []
     try:
         connection = pymysql.connect(
             host='127.0.0.1',
@@ -252,8 +255,26 @@ def profile():
                 WHERE c.ClienteID = %s
             """, (cliente_id,))
             morada = cursor.fetchone()
-    except Exception:
-        morada = None
+
+            cursor.execute("""
+                SELECT e.EncomendaID, e.Data, e.Total
+                FROM encomendas e
+                WHERE e.ClienteID = %s
+                ORDER BY e.Data DESC
+            """, (cliente_id,))
+            encomendas = cursor.fetchall()
+
+            for encomenda in encomendas:
+                cursor.execute("""
+                    SELECT ep.Quantidade, p.Nome, p.Preco
+                    FROM encomendas_produtos ep
+                    JOIN produto p ON ep.ProdutoID = p.ProdutoID
+                    WHERE ep.EncomendaID = %s
+                """, (encomenda["EncomendaID"],))
+                encomenda["produtos"] = cursor.fetchall()
+
+    except Exception as e:
+        print("Erro ao carregar morada/encomendas:", e)
     finally:
         connection.close()
 

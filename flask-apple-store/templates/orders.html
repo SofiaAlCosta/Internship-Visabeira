@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <style>
+        .center-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 3px;
+        }
+
+        .encomenda{
+            border-radius: 10px;
+            width: 300px;
+            height: 40px;
+            font-size: 20px;
+            border-color: black;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+
+        .continuar{
+            width: 175px;
+            height: 50px;
+            background-color: rgb(37, 137, 251);
+            color: white;
+            font-weight: 500;
+            font-size: 28px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 1px auto;
+        }
+
+        .info{
+            font-size: 18px;
+            color: rgb(0, 101, 217);
+            text-decoration: underline;
+            cursor: pointer;
+            border: none;
+            background-color: white;
+            padding: 14px 20px;
+            margin: 1px 0;
+            width: 100%;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .close {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {-webkit-transform: scale(0)} 
+            to {-webkit-transform: scale(1)}
+        }
+        
+        @keyframes animatezoom {
+            from {transform: scale(0)} 
+            to {transform: scale(1)}
+        }
+    </style>
+    <h1 style="text-align: center; margin-top: 3%;">Encontre a sua encomenda.</h1>
+    <hr>
+    <h3 style="color:rgb(75, 75, 75); text-align: center; margin-top: 2%; margin-bottom: 0px;">Pesquise com o número da encomenda.</h3><br>
+    <div class="center-box">
+        <input type="text" class="encomenda" placeholder="Número da encomenda"><br>
+        <input type="text" class="encomenda" placeholder="Endereço de email"><br>
+        <button class="continuar">Continuar</button><br>
+        <button class="info" onclick="document.getElementById('id01').style.display='block'">
+            Como encontrar o número<br>da encomenda +
+        </button>
+    </div>
+    <div id="id01" class="modal">
+        <div class="modal-content animate">
+            <div class="container">
+                <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Fechar">&times;</span>
+                <h3 style="text-align: center;">Como encontrar o número da encomenda</h3>
+                <p>O número da encomenda encontra-se na parte superior do email de Confirmação da<br>encomenda. O número da encomenda também se encontra na secção Resumo da<br>encomenda na nota da embalagem. Se ainda assim não conseguir encontrar o número<br>da encomenda, ligue 800 207 758 e fale com um especialista.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById('id01');
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+{% endblock %}

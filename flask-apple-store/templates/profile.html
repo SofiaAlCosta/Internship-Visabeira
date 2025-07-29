@@ -163,7 +163,26 @@
             </div>
         </form>
     </div>
-
+    <h2 style="text-align: center; background-color: rgb(230, 230, 230);">Histórico de Encomendas</h2>
+    <div class="dadosconta">
+        {% if encomendas %}
+            {% for encomenda in encomendas %}
+                <div style="border: 1px solid #ccc; border-radius: 10px; padding: 10px; margin-bottom: 20px;">
+                    <p><strong>Nº Encomenda:</strong> {{ encomenda.EncomendaID }}</p>
+                    <p><strong>Data:</strong> {{ encomenda.Data }}</p>
+                    <p><strong>Total:</strong> {{ encomenda.Total }} €</p>
+                    <p><strong>Produtos:</strong></p>
+                    <ul>
+                        {% for produto in encomenda.produtos %}
+                            <li>{{ produto.Nome }} - {{ produto.Quantidade }} x {{ produto.Preco }} €</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center;">Ainda não fizeste nenhuma encomenda.</p>
+        {% endif %}
+    </div>
     <h2 style="text-align: center; background-color: rgb(230, 230, 230);">Definições</h2>
     <div class="dadosconta">
         <div class="row">
@@ -211,6 +230,10 @@
             const mostrar = form.style.display === "none" || form.style.display === "";
             form.style.display = mostrar ? "block" : "none";
             campos.forEach(input => input.required = mostrar);
+        }
+
+        function confirmarApagarConta() {
+            return confirm("Tem a certeza que deseja apagar a sua conta? Esta ação é irreversível.");
         }
     </script>
 {% endblock %}
