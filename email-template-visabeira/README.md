@@ -19,7 +19,7 @@ Estruturar um layout de email responsivo e visualmente alinhado com a identidade
 
 ## 🖼️ Captura de ecrã
 
-![Screenshot do email](./screenshot-email.svg)
+![Screenshot do email](./screenshot-email.png)
 
 ## 🚀 Como visualizar
 
