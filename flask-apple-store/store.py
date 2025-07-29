@@ -801,11 +801,6 @@ def confirmar_encomenda():
 def encomenda_confirmada():
     return render_template("confirmation.html", categoria_data=select_from_database("SELECT * FROM categorias"))
 
-
-
-
-
-
 def select_from_database(select_query, params=None):
     rt = []
     try:
