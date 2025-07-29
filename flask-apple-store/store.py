@@ -259,6 +259,11 @@ def profile():
 
     return render_template("profile.html", categoria_data=select_from_database("SELECT * FROM categorias"), encomendas=encomendas, morada=morada)
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
 @app.route("/apagar_conta", methods=["POST"])
 def apagar_conta():
     cliente_email = session.get("email")
