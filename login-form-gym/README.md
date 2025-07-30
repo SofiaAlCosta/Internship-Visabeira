@@ -18,6 +18,16 @@ Desenvolver uma página de login visualmente apelativa e responsiva, aplicando c
 
 ## 🚀 Como executar
 
-1. Clonar o repositório principal.
-2. Navegar até à pasta `login-form-gym`.
+1. Clonar o repositório principal:
+
+   ```bash
+   git clone https://github.com/seu-utilizador/login-form-gym.git
+   ```
+
+2. Navegar até à pasta do projeto:
+
+   ```bash
+   cd login-form-gym
+   ```
+
 3. Abrir o ficheiro `index.html` num navegador web.
