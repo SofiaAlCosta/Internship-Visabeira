@@ -22,9 +22,9 @@ if (!isset($_SESSION["utilizador_tipo"]) || $_SESSION["utilizador_tipo"] !== "ad
         <nav>
             <ul>
                 <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="gerir_utilizadores.php">Utilizadores</a></li>
-                <li><a href="gerir_voos.php">Voos</a></li>
-                <li><a href="gerir_reservas.php">Reservas</a></li>
+                <li><a href="manage_users.php">Utilizadores</a></li>
+                <li><a href="manage_flights.php">Voos</a></li>
+                <li><a href="manage_reservations.php">Reservas</a></li>
                 <li><a href="../logout.php">Sair</a></li>
             </ul>
         </nav>
