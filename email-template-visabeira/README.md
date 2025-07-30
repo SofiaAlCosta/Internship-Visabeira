@@ -23,6 +23,17 @@ Estruturar um layout de email responsivo e visualmente alinhado com a identidade
 
 ## 🚀 Como visualizar
 
-1. Navegar até à pasta `email-template-visabeira`.
-2. Abrir o ficheiro `index.html` num navegador.
-3. (Opcional) Copiar o conteúdo HTML para plataformas de envio de email (ex: Mailchimp, Outlook, etc.).
+1. Clonar o repositório principal:
+
+   ```bash
+   git clone https://github.com/seu-utilizador/email-template-visabeira.git
+   ```
+
+2. Navegar até à pasta do projeto:
+
+   ```bash
+   cd email-template-visabeira
+   ```
+
+3. Abrir o ficheiro `index.html` num navegador web.
+4. (Opcional) Copiar o conteúdo HTML para plataformas de envio de email (ex: Mailchimp, Outlook, etc.).
