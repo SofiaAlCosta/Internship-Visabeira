@@ -26,6 +26,16 @@ Este projeto permitiu-me explorar os conceitos fundamentais de manipulação do 
 
 ## 🚀 Como executar
 
-1. Clonar o repositório principal.
-2. Navegar até à pasta `js-name-alert`.
+1. Clonar o repositório principal:
+
+   ```bash
+   git clone https://github.com/seu-utilizador/js-name-alert.git
+   ```
+
+2. Navegar até à pasta do projeto:
+
+   ```bash
+   cd js-name-alert
+   ```
+
 3. Abrir o ficheiro `index.html` num navegador web.
