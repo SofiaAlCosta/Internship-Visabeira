@@ -16,7 +16,7 @@ if (session_status() == PHP_SESSION_NONE) {
             <div class="navbar">
                 <div class="logo">
                     <a href="index.php">
-                        <img src="/reserva_voos/assets/images/planelogo.png" alt="Taka Airways Logo">
+                        <img src="/taka-airways-system/assets/images/planelogo.png" alt="Taka Airways Logo">
                         <span class="brand-name">Taka Airways</span>
                     </a>
                 </div>

@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($utilizador["tipo"] === "admin") {
                     header("Location: admin/dashboard.php");
                 } else {
-                    header("Location: voos.php");
+                    header("Location: flights.php");
                 }
                 exit();
             } else {

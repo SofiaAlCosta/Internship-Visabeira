@@ -70,7 +70,7 @@ $resultado = $stmt->get_result();
                             <input type="hidden" name="cancelar_id" value="<?= $reserva["reserva_id"] ?>">
                             <button type="submit">Cancelar</button>
                         </form>
-                        <a href="gerar_bilhete_pdf.php?id=<?= $reserva['reserva_id'] ?>" target="_blank" style="margin-left:10px;">
+                        <a href="create_ticket.php?id=<?= $reserva['reserva_id'] ?>" target="_blank" style="margin-left:10px;">
                             <button type="button">Bilhete PDF</button>
                         </a>
                     </td>
