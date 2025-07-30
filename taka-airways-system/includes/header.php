@@ -8,7 +8,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <head>
         <meta charset="UTF-8">
         <title>Taka Airways</title>
-        <link rel="stylesheet" href="/reserva_voos/assets/css/style.css">
+        <link rel="stylesheet" href="/taka-airways-system/assets/css/style.css">
         <script src="assets/js/main.js" defer></script>
     </head>
     <body>
@@ -23,9 +23,9 @@ if (session_status() == PHP_SESSION_NONE) {
                 <nav>
                     <ul>
                         <li><a href="index.php">Início</a></li>
-                        <li><a href="voos.php">Voos</a></li>
+                        <li><a href="flights.php">Voos</a></li>
                         <?php if (isset($_SESSION["utilizador_id"])): ?>
-                            <li><a href="minhas_reservas.php">Minhas Reservas</a></li>
+                            <li><a href="my_reservations.php">Minhas Reservas</a></li>
                             <li><a href="profile.php">Perfil</a></li>
                             <li><a href="logout.php">Sair</a></li>
                         <?php else: ?>
