@@ -1,8 +1,8 @@
-    </main>
+        </main>
 
-    <footer>
-        <p>&copy; <?php echo date("Y"); ?> Reserva de Voos. Todos os direitos reservados.</p>
-    </footer>
+        <footer>
+            <p>&copy; <?php echo date("Y"); ?> Reserva de Voos. Todos os direitos reservados.</p>
+        </footer>
 
-</body>
+    </body>
 </html>
