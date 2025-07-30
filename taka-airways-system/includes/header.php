@@ -26,7 +26,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         <li><a href="voos.php">Voos</a></li>
                         <?php if (isset($_SESSION["utilizador_id"])): ?>
                             <li><a href="minhas_reservas.php">Minhas Reservas</a></li>
-                            <li><a href="perfil.php">Perfil</a></li>
+                            <li><a href="profile.php">Perfil</a></li>
                             <li><a href="logout.php">Sair</a></li>
                         <?php else: ?>
                             <li><a href="login.php">Login</a></li>
