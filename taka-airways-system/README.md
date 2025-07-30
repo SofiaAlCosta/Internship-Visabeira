@@ -5,38 +5,38 @@ Sistema web de gestão de reservas de voos com diferentes funcionalidades para c
 ## 📸 Demonstração
 
 ### Página Inicial
-![Homepage](./assets/images/homepage.png)
+![Homepage](./assets/images/readme/homepage.png)
 
 ### Autenticação
 - **Registo**  
-  ![Registo](./assets/images/registo.png)
+  ![Registo](./assets/images/readme/registo.png)
 - **Login**  
-  ![Login](./assets/images/login.png)
+  ![Login](./assets/images/readme/login.png)
 
 ### Cliente
 
 - **Visualizar Voos Disponíveis**  
-  ![Voos](./assets/images/voos.png)
+  ![Voos](./assets/images/readme/voos.png)
 
 - **Minhas Reservas**  
-  ![Reservas](./assets/images/reservas.png)
+  ![Reservas](./assets/images/readme/reserva.png)
 
 - **Editar Perfil**  
-  ![Perfil](/.assets/images/perfil.png)
+  ![Perfil](./assets/images/readme/perfil.png)
 
 ### Administrador
 
 - **Dashboard**  
-  ![Dashboard](./assets/images/dashboard.png)
+  ![Dashboard](./assets/images/readme/dashboard.png)
 
 - **Gestão de Utilizadores**  
-  ![Utilizadores](./assets/images/gerir_utilizadores.png)
+  ![Utilizadores](./assets/images/readme/gerir_utilizadores.png)
 
 - **Gestão de Voos**  
-  ![Voos Admin](./assets/images/gerir_voos.png)
+  ![Voos Admin](./assets/images/readme/gerir_voos.png)
 
 - **Gestão de Reservas**  
-  ![Reservas Admin](./assets/images/gerir_reservas.png)
+  ![Reservas Admin](./assets/images/readme/gerir_reservas.png)
 
 ---
 
@@ -58,5 +58,5 @@ Sistema web de gestão de reservas de voos com diferentes funcionalidades para c
 4. Aceder via navegador a:
 
    ```bash
-   http://localhost/taka-airways-system
+   http://localhost:8080/taka-airways-system/index.php
    ```
