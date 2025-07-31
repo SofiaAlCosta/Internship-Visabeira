@@ -74,7 +74,7 @@ Este sistema permitiu-me consolidar conhecimentos em **PHP**, **MySQL**, **auten
 1. Clonar o repositório:
 
    ```bash
-   git clone https://github.com/seu-utilizador/taka-airways-system.git
+   git clone https://github.com/SofiaAlCosta/Internship-Visabeira
    ```
 
 2. Aceder à pasta do projeto:
