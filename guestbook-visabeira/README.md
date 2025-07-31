@@ -37,7 +37,7 @@ Este projeto permitiu-me consolidar conceitos essenciais de **PHP**, **bases de 
 1. Clonar o repositório principal:
 
     ```bash
-    git clone https://github.com/seu-utilizador/Internship-Visabeira.git
+    git clone https://github.com/SofiaAlCosta/Internship-Visabeira
     ```
 
 2. Navegar até à pasta do projeto:
