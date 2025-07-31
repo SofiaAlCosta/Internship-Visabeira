@@ -26,7 +26,7 @@ Este projeto permitiu-me consolidar conceitos essenciais de **PHP**, **bases de 
 
 ### 🔐 Login de admin
 
-![Login](./assets/images/login.png)
+![Login](./assets/images/loginadmin.png)
 
 ### 🗑️ Modo admin com botão de apagar
 
