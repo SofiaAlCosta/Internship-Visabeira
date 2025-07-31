@@ -21,7 +21,7 @@ Desenvolver uma página de login visualmente apelativa e responsiva, aplicando c
 1. Clonar o repositório principal:
 
    ```bash
-   git clone https://github.com/seu-utilizador/login-form-gym.git
+   git clone https://github.com/SofiaAlCosta/Internship-Visabeira
    ```
 
 2. Navegar até à pasta do projeto:
