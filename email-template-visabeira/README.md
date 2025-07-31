@@ -17,7 +17,7 @@ Estruturar um layout de email responsivo e visualmente alinhado com a identidade
 - Inline CSS
 - Branding oficial Visabeira
 
-## 🖼️ Captura de ecrã
+## 📸 Demonstração
 
 ![Screenshot do email](./screenshot-email.png)
 
