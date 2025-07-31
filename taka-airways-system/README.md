@@ -1,6 +1,35 @@
-# ✈️ Taka Airways - Sistema de Reserva de Voos
+# taka-airways-system
 
-Sistema web de gestão de reservas de voos com diferentes funcionalidades para clientes e administradores.
+Projeto desenvolvido no âmbito do meu estágio na Visabeira, com o objetivo de criar um sistema de reservas de voos para uma companhia fictícia: **Taka Airways**.
+
+## 🧠 Objetivo
+
+Desenvolver uma aplicação web funcional onde os utilizadores podem:
+
+- Pesquisar voos disponíveis
+- Consultar detalhes de cada voo
+- Efetuar reservas de bilhetes
+- Gerir o seu perfil e histórico de reservas
+
+O projeto também inclui um **painel de administração**, permitindo a gestão completa de:
+
+- Voos
+- Utilizadores
+- Reservas
+- Exportação de dados para PDF
+
+Este sistema permitiu-me consolidar conhecimentos em **PHP**, **MySQL**, **autenticação de sessões**, e lógica CRUD em contexto multi-utilizador (cliente e admin).
+
+## ⚙️ Tecnologias utilizadas
+
+- PHP
+- HTML5
+- CSS3
+- JavaScript
+- MySQL
+- Bootstrap
+- Font Awesome
+- Dompdf (para exportar reservas em PDF)
 
 ## 📸 Demonstração
 
