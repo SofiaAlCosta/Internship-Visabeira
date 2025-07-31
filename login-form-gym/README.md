@@ -12,7 +12,7 @@ Desenvolver uma página de login visualmente apelativa e responsiva, aplicando c
 - CSS3 (Flexbox)
 - Font Awesome (ícones via CDN)
 
-## 🖼️ Captura de ecrã
+## 📸 Demonstração
 
 ![Screenshot do formulário de login](./screenshot-login.png)
 
