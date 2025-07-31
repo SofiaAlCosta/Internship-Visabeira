@@ -89,7 +89,7 @@ O projeto permitiu-me praticar conceitos de **desenvolvimento web full stack**, 
 1. Clonar o repositório:
 
    ```bash
-   git clone https://github.com/seu-utilizador/flask-apple-store.git
+   git clone https://github.com/SofiaAlCosta/Internship-Visabeira
    ```
 
 2. Aceder à pasta do projeto:
