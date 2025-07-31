@@ -29,7 +29,7 @@ Este projeto permitiu-me explorar os conceitos fundamentais de manipulação do 
 1. Clonar o repositório principal:
 
    ```bash
-   git clone https://github.com/seu-utilizador/js-name-alert.git
+   git clone https://github.com/SofiaAlCosta/Internship-Visabeira
    ```
 
 2. Navegar até à pasta do projeto:
