@@ -26,7 +26,7 @@ Estruturar um layout de email responsivo e visualmente alinhado com a identidade
 1. Clonar o repositório principal:
 
    ```bash
-   git clone https://github.com/seu-utilizador/email-template-visabeira.git
+   git clone https://github.com/SofiaAlCosta/Internship-Visabeira
    ```
 
 2. Navegar até à pasta do projeto:
